@@ -1,29 +1,25 @@
 stages:
-    - init
-    - deploy_prod
-
-  before_script:
-    - apt-get update -qy
-    - apt-get install -y python-dev python-pip
-
-  init:
-    stage: init
-    image: python:latest
-    script:
-      - pip install -r requirements.txt
-
-  deploy_prod:
-    image: python:latest
-    stage: deploy_prod
-    only:
-      - master
-    script:
-      - pip install -r requirements.txt
-      - git remote add heroku https://git.heroku.com/django-esgi.git || true
-      - git push -f heroku HEAD:master
-      - echo "Deployed to prod server"
-
-    environment:
-      name: prod
-      url: https://django-esgi.herokuapp.com/
-    when: manual
+  - init
+  - deploy_prod
+before_script:
+  - apt-get update -qy
+  - apt-get install -y python-dev python-pip
+init:
+  stage: init
+  image: python:latest
+  script:
+    - pip install -r requirements.txt
+deploy_prod:
+  image: python:latest
+  stage: deploy_prod
+  only:
+    - master
+  script:
+    - pip install -r requirements.txt
+    - git remote add heroku https://$HEROKU_USER:$HEROKU_API_KEY@git.heroku.com/django-esgi.git || true
+    - git push -f heroku HEAD:master
+    - echo "Deployed to prod server"
+  environment:
+    name: prod
+    url: https://django-esgi.herokuapp.com/
+  when: manual
