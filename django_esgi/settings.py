@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_app'
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'django_esgi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ldssmosx',
+        'USER': 'ldssmosx',
+        'PASSWORD': '07zzV7z6tU9Xl-KujSD34GIYWqxTHCHl',
+        'HOST': 'tai.db.elephantsql.com',
+        'PORT': '5432',
     }
 }
 
