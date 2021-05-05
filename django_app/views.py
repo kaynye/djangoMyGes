@@ -85,4 +85,3 @@ def profCourseStudents(request,id):
     return render(request,"django_app/prof.course.students.html",{
             "classrooms" : course.m_classroom.all()
             })
-
