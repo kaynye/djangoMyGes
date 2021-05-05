@@ -30,6 +30,8 @@ class Matiere(models.Model):
     m_coefficient = models.IntegerField(verbose_name="Coefficient de la matiere")
     m_profs = models.ManyToManyField(User,verbose_name="Prof de la matiére")
     m_evenement = models.ManyToManyField(Evenement, verbose_name="Evenements")
+    m_classroom = models.ManyToManyField(Classroom, verbose_name="Classrooms")
+
 
     def __str__(self):
         return self.m_name
