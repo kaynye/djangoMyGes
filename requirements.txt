@@ -3,3 +3,7 @@ Django==3.2.1
 psycopg2==2.8.6
 pytz==2021.1
 sqlparse==0.4.1
+bootstrap-admin==0.4.4
+django-import-export==2.5.0
+gunicorn==19.7.1
+

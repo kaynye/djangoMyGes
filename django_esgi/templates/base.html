@@ -1,0 +1,68 @@
+{% load static %}
+<html>
+    <head>
+        {% block title %}{% endblock %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+        <!-- <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'> -->
+        <link rel="stylesheet"  href="{% static "django_app/css/base.css" %}">
+        <link rel="stylesheet"  href="{% static "django_app/css/bootstrap.css" %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+        <script  src="{% static "jquery/dist/jquery.min.js" %}"></script>
+         <script  src="{% static "base/js/base.js" %}"></script>
+         
+        {% block css %}{% endblock %}        
+        {% block javascript %}{% endblock %}        
+    </head>
+    <body>
+      
+    {% if request.user.is_authenticated %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">Navbar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarColor01">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Home
+                    <span class="sr-only">(current)</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Pricing</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    
+                  </div>
+                </li>
+              </ul>
+              <div class="nav-item">
+                <a class="text-light " href="{% url 'django_app:logoutUser' %}"><i class="fas fa-sign-out-alt fa-lg nav-item"></i>Deconnexion</a>
+              </div>
+              
+
+
+            </div>
+          </nav>
+
+        {% endif %}
+        <div class="content container">
+            {% block content %}
+        
+            {% endblock %}
+        </div>
+    </body>
+</html>
