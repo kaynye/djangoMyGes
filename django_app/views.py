@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import login, authenticate,logout
 from django_app.models import *
-
+from django.contrib import messages #import messages
 
 
 @login_required
@@ -18,7 +18,41 @@ def login_page(request):
     else:
         return render(request,"django_app/index.html")
 
+@login_required
+def profile(request):
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
 
+    print(getClass)
+    return render(request,"django_app/profile.html", {"class": getClass})
+
+@login_required
+def planning(request):
+    return render(request, "django_app/planning.html")
+
+def notes(request):
+    return render(request, "django_app/notes.html")
+
+@login_required
+def change_password(request):
+    if request.POST.get("actual_password") and request.POST.get("new_password") and request.POST.get("re_password"):
+        if authenticate(username=request.user.username, password=request.POST.get("actual_password")) is not None:
+            if request.POST.get("new_password") == request.POST.get("re_password"):
+                request.user.set_password(request.POST.get("new_password"))
+                request.user.save()
+                messages.success(request, "Le mot de passe à correctement été changée." )
+                return redirect("django_app:login_page")
+            else:
+                messages.error(request, "Les mots de passes ne correspondent pas.")
+                return redirect("django_app:profile")
+        else:
+            messages.error(request, "Le mot de passe actuel est incorrect.")
+            return redirect("django_app:profile")
+
+@login_required
+def student_class(request):
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+    getStudents = getClass.c_student.all()
+    return render(request, "django_app/classes.html", {"students": getStudents, "class": getClass})
 
 @csrf_exempt
 def loginUser(request):
