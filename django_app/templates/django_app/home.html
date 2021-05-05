@@ -4,7 +4,36 @@
 {% block css %}
 {% endblock %}  
 {% block content%}
+    <br>
     <div class="container">
-        <h1>Home Page</h1>
+        <h1>Tableau de Bord</h1>
+        <div>
+            <canvas id="myChart"></canvas>
+          </div>
     </div>
+    <script>
+
+        const configBar = {
+            type: 'bar',
+            data: {},
+            options: {
+                responsive: true,
+                plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Chart.js Bar Chart'
+                }
+                }
+            }
+        };
+
+        var myChart = new Chart(
+            document.getElementById('myChart'),
+            configBar
+        );
+
+    </script>
 {% endblock %}
