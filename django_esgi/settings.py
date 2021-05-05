@@ -96,11 +96,14 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ldssmosx',
-        'USER': 'ldssmosx',
-        'PASSWORD': '07zzV7z6tU9Xl-KujSD34GIYWqxTHCHl',
-        'HOST': 'tai.db.elephantsql.com',
-        'PORT': '5432',
+        'OPTIONS': {
+            'options': '-c search_path=django,public'
+        },
+        'NAME': 'django-esgi',
+        'USER': 'django-esgi',
+        'PASSWORD': 'CacaProut123',
+        'HOST': 'st73522-001.dbaas.ovh.net',
+        'PORT': '35504',
     }
 }
 
