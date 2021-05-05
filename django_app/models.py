@@ -34,10 +34,6 @@ class Matiere(models.Model):
     def __str__(self):
         return self.m_name
     
-
-
-
-
 class SupportDeCours(models.Model):
     sdc_name=models.CharField(max_length=255, verbose_name="Nom du support")
     sdc_file = models.FileField(blank=True, verbose_name="fichier")
