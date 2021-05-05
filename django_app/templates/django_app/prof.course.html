@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}  
+{% block content%}
+    <div class="container">
+        <h1>Home Page</h1>
+        {% for course in courses.all %}
+            <li><a href="{% url 'django_app:profCourseStudents' id=1 %}">{{course.m_name}}</a></li>
+        {%endfor%}
+    </div>
+{% endblock %}

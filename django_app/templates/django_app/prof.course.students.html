@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}  
+{% block content%}
+    <div class="container">
+        <h1>Home Page</h1>
+        {% for classroom in classrooms %}
+            {%for student in classroom.c_student.all %}
+              <li>{{student}}</li>
+            {%endfor%}
+
+          
+        {%endfor%}
+    </div>
+{% endblock %}
