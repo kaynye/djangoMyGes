@@ -4,8 +4,8 @@ from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import login, authenticate,logout
 from django.contrib import messages #import messages
 from .models import Classroom
-
-
+from .models import Matiere
+from .models import Note
 
 @login_required
 def home(request):
@@ -30,8 +30,46 @@ def profile(request):
 def planning(request):
     return render(request, "django_app/planning.html")
 
+@login_required
 def notes(request):
-    return render(request, "django_app/notes.html")
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+    getMatieres = Matiere.objects.filter(m_classroom=getClass)
+    getNotes = Note.objects.filter(n_matiere=getMatieres).all()
+
+    content = {}
+
+    #  Add Matiere
+
+    notesGlobal = []
+
+    for matiere in getMatieres:
+        content[matiere.m_name] = {}
+        content[matiere.m_name]["intervenants"] = []
+        content[matiere.m_name]["notes"] = []
+        content[matiere.m_name]["coef"] = matiere.m_coefficient
+        notes = []
+        for intervenant in matiere.m_profs.all():
+            content[matiere.m_name]["intervenants"].append(intervenant.first_name + " " + intervenant.last_name)
+        for note in matiere.m_note.all().filter(n_eleve=request.user).filter(n_matiere__m_classroom=getClass):
+            notes.append(note.n_note)
+            content[matiere.m_name]["notes"].append({"note": note.n_note, "type": note.n_type.tn_name})
+        
+        if len(notes) != 0:
+            content[matiere.m_name]["moy"] = round(sum(notes) / len(notes), 2)
+            notesGlobal.append((content[matiere.m_name]["moy"], matiere.m_coefficient))
+
+    # Calc Moy
+
+    calcMoyenne = 0
+    totalCoef = 0
+
+    for k,v in notesGlobal:
+        calcMoyenne += k*v
+        totalCoef += v 
+
+    calcMoyenne = calcMoyenne / totalCoef
+
+    return render(request, "django_app/notes.html", {"data": content, "moy": round(calcMoyenne, 2)})
 
 @login_required
 def change_password(request):

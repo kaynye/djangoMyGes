@@ -19,13 +19,38 @@
               </tr>
             </thead>
             <tbody>
-                {% for student in students %}
+              {% for matiere,value in data.items %}
                 <tr>
-                    <th scope="row">{{ student.username }}</th>
-                    <td>{{ student.first_name }} {{ student.last_name|upper }}</td>
+                    <td>{{ matiere }}</td>
+                    <td>
+                      {% for intervenant in value.intervenants %}
+                        {{ intervenant }}
+                      {% endfor %}
+                    </td>
+                    <td>
+                      {{ value.coef }}
+                    </td>
+                    <td>
+                      {% for note in value.notes %}
+                          {% if note.type == "Examen" %}
+                            <strong>{{ note.note }}</strong>
+                          {% else %}
+                            {{ note.note }}
+                          {% endif %}
+                      {% endfor %}
+                    </td>
+                    <td>
+                      {{ value.moy }}
+                    </td>
                 </tr>
-                {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
+          <div class="form-group row">
+            <label for="staticEmail" class="col-sm-2 col-form-label">Moyenne Général</label>
+            <div class="col-sm-10">
+              <input type="text" readonly="" class="form-control-plaintext" id="staticEmail" value="{{ moy }}">
+            </div>
+          </div>
     </div>
 {% endblock %}
