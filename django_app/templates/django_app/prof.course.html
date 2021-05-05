@@ -4,10 +4,33 @@
 {% block css %}
 {% endblock %}  
 {% block content%}
+    <br>
     <div class="container">
-        <h1>Home Page</h1>
-        {% for course in courses.all %}
-            <li><a href="{% url 'django_app:profCourseStudents' id=1 %}">{{course.m_name}}</a></li>
-        {%endfor%}
+        <h1>Matières</h1>
+        <br>
+        <table class="table table-hover">
+            <thead>
+              <tr class="table-active">
+                <th scope="col">#</th>
+                <th scope="col">Nom</th>
+                <th scope="col">Description</th>
+                <th scope="col">Coefficient</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for course in courses.all %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>
+                        <a href="{% url 'django_app:profCourseStudents' id=1 %}">
+                            {{ course.m_name }}
+                        </a>
+                    </td>
+                    <td>{{ course.m_description }}</td>
+                    <td>{{ course.m_coefficient }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
     </div>
 {% endblock %}

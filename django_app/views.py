@@ -74,6 +74,7 @@ def logoutUser(request):
 @login_required
 def profCourse(request):
     courses = Matiere.objects.all()
+
     return render(request,"django_app/prof.course.html",{
             "courses" : courses
             })
@@ -81,7 +82,15 @@ def profCourse(request):
 @login_required
 def profCourseStudents(request,id):
     course = Matiere.objects.get(id=id)
-    print(course.m_classroom)
+
     return render(request,"django_app/prof.course.students.html",{
             "classrooms" : course.m_classroom.all()
+            })
+
+@login_required
+def profCourseDetails(request,id):
+    course = Matiere.objects.get(id=id)
+
+    return render(request,"django_app/prof.course.students.html",{
+            "course" : course
             })

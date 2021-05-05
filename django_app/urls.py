@@ -18,6 +18,6 @@ urlpatterns = [
     path("change_password", views.change_password, name="change_password"),
     path("classes", views.student_class, name="classes"),
     path("planning", views.planning, name="planning"),
-    path("notes", views.notes, name="notes")
-
+    path("notes", views.notes, name="notes"),
+    path('prof/course/<int:id>', views.profCourseDetails, name="profCourseDetails")
 ]
