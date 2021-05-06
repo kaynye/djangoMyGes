@@ -50,6 +50,20 @@
                     Notes
                   </a>
                 </li>
+                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:profCourse' %}">
+                    <i class="fas fa-book"></i>
+                    Matières
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:students' %}">
+                    <i class="fas fa-user-graduate"></i>
+                    Elèves
+                  </a>
+                </li>
               </ul>
               <div class="nav-item">
                   <a class="text-light " href="{% url 'django_app:profile' %}">

@@ -4,6 +4,10 @@ from django.views.decorators.csrf import csrf_protect,csrf_exempt
 from django.contrib.auth import login, authenticate,logout
 from django_app.models import *
 from django.contrib import messages #import messages
+from django.contrib.auth.models import User, Group
+from .forms import NoteForm
+
+
 
 
 @login_required
@@ -82,9 +86,12 @@ def profCourse(request):
 @login_required
 def profCourseStudents(request,id):
     course = Matiere.objects.get(id=id)
+    print("============================================\n")
+    print(course)
+    print("============================================\n")
 
     return render(request,"django_app/prof.course.students.html",{
-            "classrooms" : course.m_classroom.all()
+            "classrooms" : course.m_classroom.all() 
             })
 
 @login_required
@@ -94,3 +101,25 @@ def profCourseDetails(request,id):
     return render(request,"django_app/prof.course.students.html",{
             "course" : course
             })
+    
+@login_required
+def students(request):
+    group= Group.objects.filter(name="eleve").first()
+    students = User.objects.filter(groups= group).all()
+    print(students)
+    return render(request,"django_app/prof.all.students.html",{
+            "students" : students,
+            })
+    
+def noteOperation(request):
+    # dictionary for initial data with 
+    # field names as keys
+    context ={}
+  
+    # add the dictionary during initialization
+    form = NoteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+          
+    context['form']= form
+    return render(request, "django_app/prof.student.note.html", context)
