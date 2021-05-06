@@ -1,0 +1,107 @@
+{% load static %}
+<html>
+    <head>
+        {% block title %}{% endblock %}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+        <!-- <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'> -->
+        <link rel="stylesheet"  href="{% static 'django_app/css/base.css' %}">
+        <link rel="stylesheet"  href="{% static 'django_app/css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'django_app/css/global.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/lux/bootstrap.min.css" integrity="sha384-9+PGKSqjRdkeAU7Eu4nkJU8RFaH8ace8HGXnkiKMP9I9Te0GJ4/km3L1Z8tXigpG" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>  
+
+
+        {% block css %}{% endblock %}        
+        {% block javascript %}{% endblock %}        
+    </head>
+    <body>
+      
+    {% if request.user.is_authenticated %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#">MYGES 2.0</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          
+            <div class="collapse navbar-collapse" id="navbarColor01">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.path == '/home' %}active{% endif %}">
+                  <a class="nav-link" href="{% url 'django_app:home' %}">
+                    <i class="fa fa-home"></i>
+                    Accueil
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/classes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:classes' %}">
+                    <i class="fas fa-school"></i>
+                    Classes
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/planning' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:planning' %}">
+                    <i class="fas fa-calendar-alt"></i>
+                    Planning
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:notes' %}">
+                    <i class="fas fa-bell"></i>
+                    Notes
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:profCourse' %}">
+                    <i class="fas fa-book"></i>
+                    Matières
+                  </a>
+                </li>
+                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                  
+                  <a class="nav-link" href="{% url 'django_app:students' %}">
+                    <i class="fas fa-user-graduate"></i>
+                    Elèves
+                  </a>
+                </li>
+              </ul>
+              <div class="nav-item">
+                  <a class="text-light " href="{% url 'django_app:profile' %}">
+                    <i class="fas fa-user fa-lg nav-item"></i> {{ request.user.first_name }} {{ request.user.last_name|upper }}
+                  </a>
+              </div>
+              <div class="nav-item">
+                <a class="text-light " href="{% url 'django_app:logoutUser' %}"><i class="fas fa-sign-out-alt fa-lg nav-item"></i>Deconnexion</a>
+              </div>
+              
+
+
+            </div>
+          </nav>
+
+        {% endif %}
+
+        <div class="content container">
+          {% for message in messages %}
+          <br>
+          <div class="container-fluid p-0">
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert" >
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              {{ message }}
+            </div>
+          </div>
+          {% endfor %}
+
+            {% block content %}
+        
+            {% endblock %}
+        </div>
+    </body>
+</html>

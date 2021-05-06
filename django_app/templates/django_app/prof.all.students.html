@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}  
+{% block content%}
+<br>
+<div class="container" style="max-width: 970px;">
+    <h1>Elèves</h1>
+    <div class="row">
+        {% for student in students.all %}
+      <div class="col-md-4">
+        <div class="card mb-3 ">
+           <img src="https://picsum.photos/200/200?random={{student.id}}">
+
+            <div class="card-body">
+              <p class="card-text font-weight-bold">{{ student.first_name }} {{ student.last_name|upper }}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Id: {{ student.id }}</li>
+                <li class="list-group-item">Email: {{ student.email }}</li>
+                <li class="list-group-item">Username: {{ student.username }}</li>
+            </ul>
+            <div class="d-flex flex-column">
+              <a href="#" class="btn btn-outline-primary">Notes</a>
+            </div>
+        
+          </div>
+        </div>
+
+      
+      {% endfor %}
+    </div>
+  </div>
+
+    
+{% endblock %}
