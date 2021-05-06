@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}  
+
+{% block css %}
+{% endblock %}  
+{% block content%}
+    <br>
+    <div class="container">
+
+        {% include 'django_app/form_generique_modal.html' %}
+        
+        <table class="table table-hover">
+            <thead>
+              <tr class="table-active">
+                <th scope="col">Nom</th>
+                <th scope="col">Promotions</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for class in classrooms %}
+                <tr>
+                    <td>{{ class }}</td>
+                    <td>{{ class.c_promotion }}</td>
+                    <td>
+                        <a href="{% url 'django_app:coordinateurClassroomEdit' id=class.id %}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        |
+                        <a href="{% url 'django_app:coordinateurClassroomDelete' id=class.id %}">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                     </td>
+                </tr>
+            {% endfor %}                       
+            </tbody>
+          </table>
+    </div>
+{% endblock %}

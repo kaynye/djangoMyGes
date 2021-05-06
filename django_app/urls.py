@@ -29,5 +29,17 @@ urlpatterns = [
     
     path('coordinateur/matiere', views.coordinateurMatiereCreate, name="coordinateurMatiereCreate"),
     path('coordinateur/matiere/<int:id>/edit', views.coordinateurMatiereEdit, name="coordinateurMatiereEdit"),
-    path('coordinateur/matiere/<int:id>/delete', views.coordinateurMatiereDelete, name="coordinateurMatiereDelete")
+    path('coordinateur/matiere/<int:id>/delete', views.coordinateurMatiereDelete, name="coordinateurMatiereDelete"),
+    
+    path('coordinateur/event', views.coordinateurEventCreate, name="coordinateurEventCreate"),
+    path('coordinateur/event/<int:id>/edit', views.coordinateurEventEdit, name="coordinateurEventEdit"),
+    path('coordinateur/event/<int:id>/delete', views.coordinateurEventDelete, name="coordinateurEventDelete"),
+    
+    path('coordinateur/classroom', views.coordinateurClassroomCreate, name="coordinateurClassroomCreate"),
+    path('coordinateur/classroom/<int:id>/edit', views.coordinateurClassroomEdit, name="coordinateurClassroomEdit"),
+    path('coordinateur/classroom/<int:id>/delete', views.coordinateurClassroomDelete, name="coordinateurClassroomDelete"),
+    
+    path("change_profile", views.model_form_upload, name="change_profile"),
+    path("change_profile", views.model_form_upload, name="change_profile"),
+    path("get_events", views.get_events, name="get_events")
 ]

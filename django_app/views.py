@@ -9,10 +9,12 @@ from django.contrib import messages  # import messages
 from django.contrib.auth.models import User, Group
 from .forms import *
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.http import JsonResponse
+from pprint import pprint
 
 @login_required
 def home(request):
-    return render(request, "django_app/home.html")
+    return render(request,"django_app/home.html", {"range": range(9), "random": range(20, 60)})
 
 
 def login_page(request):
@@ -25,24 +27,56 @@ def login_page(request):
 
 @login_required
 def profile(request):
-    getClass = (
-        Classroom.objects.filter(c_student=request.user)
-        .all()
-        .order_by("c_promotion")
-        .first()
-    )
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+    form = ProfileUserForm()
 
-    print(getClass)
-    return render(request, "django_app/profile.html", {"class": getClass})
-
+    return render(request,"django_app/profile.html", {"class": getClass, "form": form})
 
 @login_required
 def planning(request):
     return render(request, "django_app/planning.html")
 
-
+@login_required
 def notes(request):
-    return render(request, "django_app/notes.html")
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion")
+    
+    content = {}
+
+    #  Add Matiere
+
+    moyennes = []
+
+    for elem in getClass:
+        notesGlobal = []
+        content[elem.c_name] = {}
+        getMatieres = Matiere.objects.filter(m_classroom=elem)
+        for matiere in getMatieres:
+            content[elem.c_name][matiere.m_name] = {}
+            content[elem.c_name][matiere.m_name]["intervenants"] = []
+            content[elem.c_name][matiere.m_name]["notes"] = []
+            content[elem.c_name][matiere.m_name]["coef"] = matiere.m_coefficient
+            notes = []
+            for intervenant in matiere.m_profs.all():
+                content[elem.c_name][matiere.m_name]["intervenants"].append(intervenant.first_name + " " + intervenant.last_name)
+            for note in matiere.m_note.all().filter(n_eleve=request.user).filter(n_matiere__m_classroom=elem):
+                notes.append(note.n_note)
+                content[elem.c_name][matiere.m_name]["notes"].append({"note": note.n_note, "type": note.n_type.tn_name})
+            
+            if len(notes) != 0:
+                content[elem.c_name][matiere.m_name]["moy"] = round(sum(notes) / len(notes), 2)
+                notesGlobal.append((content[elem.c_name][matiere.m_name]["moy"], matiere.m_coefficient))
+
+        calcMoyenne = 0
+        totalCoef = 0
+
+        for k,v in notesGlobal:
+            calcMoyenne += k*v
+            totalCoef += v 
+
+        calcMoyenne = calcMoyenne / totalCoef
+        moyennes.append(round(calcMoyenne, 2))
+
+    return render(request, "django_app/notes.html", {"data": content, "moy": moyennes})
 
 
 @login_required
@@ -74,17 +108,9 @@ def change_password(request):
 
 @login_required
 def student_class(request):
-    getClass = (
-        Classroom.objects.filter(c_student=request.user)
-        .all()
-        .order_by("c_promotion")
-        .first()
-    )
-    getStudents = getClass.c_student.all()
-    return render(
-        request, "django_app/classes.html", {"students": getStudents, "class": getClass}
-    )
-
+    getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion")
+    print("CLASE CLASSE CLASSE", getClass)
+    return render(request, "django_app/classes.html", {"classes": getClass})
 
 @csrf_exempt
 def loginUser(request):
@@ -105,7 +131,6 @@ def loginUser(request):
 def logoutUser(request):
     logout(request)
     return redirect("django_app:login_page")
-
 
 @login_required
 def profCourse(request):
@@ -271,15 +296,15 @@ def coordinateurMatiereEdit(request, id):
     matiere = Matiere.objects.get(id=id)
 
     if request.method == "POST":
-        form = EditMatiereForm(request.POST, instance = matiere)
+        form = EditEventForm(request.POST, instance = matiere)
         if form.is_valid():
             matiere = form.save()
-            form = EditMatiereForm(instance = matiere)
+            form = EditEventForm(instance = matiere)
 
             return redirect('django_app:coordinateurMatiereCreate')
 
     else:
-        form = EditMatiereForm(instance = matiere)
+        form = EditEventForm(instance = matiere)
 
 
     return render(
@@ -295,3 +320,156 @@ def coordinateurMatiereDelete(request, id):
     matiere.delete()
         
     return redirect('django_app:coordinateurMatiereCreate')
+
+@login_required
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = ProfileUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = form.save(commit=False)
+            
+            if ProfileUser.objects.filter(pu_user=request.user).exists():
+                ProfileUser.objects.filter(pu_user=request.user).first().delete()
+
+            messages.success(request, "L'image à correctement été changée." )
+            f.pu_user = request.user
+            f.save()
+        else:
+            messages.error(request, "L'image envoyé ne correspond pas aux attentes de l'application." )
+        
+    return redirect("django_app:profile")
+
+@csrf_exempt
+@login_required
+def get_events(request):
+    if request.method == 'POST':
+        results = []
+        getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+        getEvenements = Evenement.objects.filter(e_class=getClass).all()
+
+        for event in getEvenements:
+            results.append({"title": event.e_name, "start": event.e_date_debut, "end": event.e_date_fin})
+
+        return JsonResponse(results, safe=False)
+    else:
+        return JsonResponse({"method_allowed": ["POST"]})
+
+@login_required
+def coordinateurEventCreate(request):
+    events = Evenement.objects.all()
+
+    if request.method == "POST":
+        form = EventCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = EventCreationForm()
+
+            return render(
+                request,
+                "django_app/coordinateur.event.html",
+                {
+                    "form": form,
+                    "events": events,
+                    "title": "Événements",
+                    "method": "POST",
+                },
+            )
+    else:
+        form = EventCreationForm()
+
+    return render(
+        request,
+        "django_app/coordinateur.event.html",
+        {"form": form, "events": events, "title": "Événements", "method": "POST"},
+    )
+
+
+@login_required
+def coordinateurEventEdit(request, id):
+    event = Evenement.objects.get(id=id)
+
+    if request.method == "POST":
+        form = EditEventForm(request.POST, instance = event)
+        if form.is_valid():
+            event = form.save()
+            form = EditEventForm(instance = event)
+
+            return redirect('django_app:coordinateurEventCreate')
+
+    else:
+        form = EditEventForm(instance = event)
+
+
+    return render(
+        request,
+        "django_app/form_generique.html",
+        {"form": form, "title": "Événements", "method": "POST"},
+    )
+
+@login_required
+def coordinateurEventDelete(request, id):
+    event = Evenement.objects.get(id=id)
+
+    event.delete()
+        
+    return redirect('django_app:coordinateurEventCreate')
+
+@login_required
+def coordinateurClassroomCreate(request):
+    classrooms = Classroom.objects.all()
+    print("CLASSE CLASSE CLASSE", classrooms)
+    if request.method == "POST":
+        form = ClassroomCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = ClassroomCreationForm()
+
+            return render(
+                request,
+                "django_app/coordinateur.classroom.html",
+                {
+                    "form": form,
+                    "classrooms": classrooms,
+                    "title": "Classes",
+                    "method": "POST",
+                },
+            )
+    else:
+        form = ClassroomCreationForm()
+
+    return render(
+        request,
+        "django_app/coordinateur.classroom.html",
+        {"form": form, "classrooms": classrooms, "title": "Classes", "method": "POST"},
+    )
+
+
+@login_required
+def coordinateurClassroomEdit(request, id):
+    classroom = Classroom.objects.get(id=id)
+
+    if request.method == "POST":
+        form = EditClassroomForm(request.POST, instance = classroom)
+        if form.is_valid():
+            classroom = form.save()
+            form = EditClassroomForm(instance = classroom)
+
+            return redirect('django_app:coordinateurClassroomCreate')
+
+    else:
+        form = EditClassroomForm(instance = classroom)
+
+
+    return render(
+        request,
+        "django_app/form_generique.html",
+        {"form": form, "title": "Classes", "method": "POST"},
+    )
+
+@login_required
+def coordinateurClassroomDelete(request, id):
+    classroom = Classrooom.objects.get(id=id)
+
+    classroom.delete()
+        
+    return redirect('django_app:coordinateurClassroomCreate')

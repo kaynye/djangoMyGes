@@ -14,35 +14,35 @@
             <thead>
               <tr class="table-active">
                 <th scope="col">Nom</th>
-                <th scope="col">Description</th>
-                <th scope="col">coefficient</th>
-                <th scope="col">Intervenants</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
+                <th scope="col">Fréquent</th>
+                <th scope="col">En présentiel</th>
+                <th scope="col">Commentaire</th>
                 <th scope="col">Classes</th>
                 <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
-            {% for matiere in matieres %}
+            {% for event in events %}
                 <tr>
-                    <td>{{ matiere }}</td>
-                    <td>{{ matiere.m_description }}</td>
-                    <td>{{ matiere.m_coefficient }}</td>
+                    <td>{{ event }}</td>
+                    <td>{{ event.e_date_debut }}</td>
+                    <td>{{ event.e_date_fin }}</td>
+                    <td>{{ event.e_frequent }}</td>
+                    <td>{{ event.e_is_presenciel }}</td>
+                    <td>{{ event.e_commentaire }}</td>
                     <td>
-                        {% for prof in matiere.m_profs.all %}
-                            {{ prof.first_name }}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for class in matiere.m_classroom.all %}
+                        {% for class in event.e_class.all %}
                             {{ class }}
                         {% endfor %}
                     </td>
                     <td>
-                        <a href="{% url 'django_app:coordinateurMatiereEdit' id=matiere.id %}">
+                        <a href="{% url 'django_app:coordinateurEventEdit' id=event.id %}">
                             <i class="fas fa-edit"></i>
                         </a>
                         |
-                        <a href="{% url 'django_app:coordinateurMatiereDelete' id=matiere.id %}">
+                        <a href="{% url 'django_app:coordinateurEventDelete' id=event.id %}">
                             <i class="fas fa-trash-alt"></i>
                         </a>
                      </td>

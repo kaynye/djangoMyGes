@@ -2,8 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
 
-
-
 # description = models.CharField(max_length=200)
 class Classroom(models.Model):
     c_name = models.CharField(max_length=10, verbose_name="Nom de la classe")
@@ -12,6 +10,10 @@ class Classroom(models.Model):
     
     def __str__(self):
         return self.c_name
+
+class ProfileUser(models.Model):
+    pu_picture = models.ImageField(upload_to='profile')
+    pu_user = models.OneToOneField(User,on_delete=models.PROTECT,related_name="u_profile",verbose_name="Utilisateur")
 
 class Evenement(models.Model):
     e_name = models.CharField(max_length=255, verbose_name="Nom de l'evenement")
@@ -24,6 +26,7 @@ class Evenement(models.Model):
 
     def __str__(self):
         return self.e_name
+
 class Matiere(models.Model):
     m_name = models.CharField(max_length=255, verbose_name="Nom de la matiere")
     m_description = models.TextField(max_length=400, verbose_name="description")
@@ -58,7 +61,7 @@ class Note(models.Model):
     n_eleve = models.ForeignKey(User, on_delete=models.PROTECT,related_name="e_note", verbose_name="Eleve", null=True,blank=True)
 
     def __str__(self):
-        return self.n_eleve+n_matiere
+        return str(self.n_eleve) + str(self.n_matiere)
 
 
 

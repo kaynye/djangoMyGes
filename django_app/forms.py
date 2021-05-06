@@ -30,13 +30,34 @@ class EditUserForm(UserChangeForm):
 class MatiereCreationForm(forms.ModelForm):
     class Meta:
         model = Matiere
-        fields = ['m_name', 'm_description', 'm_coefficient', 'm_profs', 'm_evenement', 'm_classroom']
+        fields = ['m_name', 'm_description', 'm_coefficient', 'm_profs', 'm_classroom']
 
-# class SignUpForm(UserCreationForm):
-#     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-#     last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-#     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
+class EditMatiereForm(forms.ModelForm):
+    class Meta:
+        model = Matiere
+        fields = ['m_name', 'm_description', 'm_coefficient', 'm_evenement', 'm_profs', 'm_classroom']
 
-#     class Meta:
-#         model = User
-#         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', )
+class EventCreationForm(forms.ModelForm):
+    class Meta:
+        model = Evenement
+        fields = ['e_name', 'e_date_debut', 'e_date_fin', 'e_frequent', 'e_is_presenciel', 'e_commentaire']
+
+class EditEventForm(forms.ModelForm):
+    class Meta:
+        model = Evenement
+        fields = ['e_name', 'e_date_debut', 'e_date_fin', 'e_frequent', 'e_is_presenciel', 'e_commentaire', 'e_class']
+        
+class ClassroomCreationForm(forms.ModelForm):
+    class Meta:
+        model = Classroom
+        fields = ['c_name', 'c_promotion']
+
+class EditClassroomForm(forms.ModelForm):
+    class Meta:
+        model = Classroom
+        fields = ['c_name', 'c_student', 'c_promotion']
+                
+class ProfileUserForm(forms.ModelForm):
+    class Meta:
+        model = ProfileUser
+        fields = ('pu_picture', )
