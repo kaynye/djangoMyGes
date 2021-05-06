@@ -30,7 +30,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "django-esgi.herokuapp.com",
-    "localhost"
+    "localhost",
+    "127.0.0.1"
 ]
 
 
