@@ -58,7 +58,7 @@ class Note(models.Model):
     n_eleve = models.ForeignKey(User, on_delete=models.PROTECT,related_name="e_note", verbose_name="Eleve", null=True,blank=True)
 
     def __str__(self):
-        return self.n_eleve+n_matiere
+        return str(self.n_eleve)+" "+ str(self.n_matiere)
 
 
 

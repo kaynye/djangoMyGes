@@ -14,5 +14,4 @@ class NoteForm(forms.ModelForm):
             "n_note",
             "n_type",
             "n_matiere",
-            "n_eleve",
         ]

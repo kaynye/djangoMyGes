@@ -21,6 +21,7 @@ urlpatterns = [
     path("notes", views.notes, name="notes"),
     path('prof/course/<int:id>', views.profCourseDetails, name="profCourseDetails"),
     path('prof/students', views.students, name="students"),
-    path('prof/students/note', views.noteOperation, name="noteOperation")
+    path('prof/students/<int:id>/notes', views.notePost, name="noteOperation"),
+    path('prof/students/notes/<int:id>/delete', views.NoteDelete, name="NoteDelete")
 
 ]
