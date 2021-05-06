@@ -18,6 +18,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+if os.environ.get('ENV') == 'PROD':
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+    STATICFILES_DIRS = (
+        os.path.join(BASE_DIR, 'static'),
+    )
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+else:
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -30,7 +41,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "django-esgi.herokuapp.com",
-    "localhost"
+    "localhost",
+    "127.0.0.1"
 ]
 
 
@@ -76,6 +88,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+if os.environ.get('ENV') == 'PROD':
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+
 ROOT_URLCONF = 'django_esgi.urls'
 
 TEMPLATES = [
@@ -97,9 +112,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_esgi.wsgi.application'
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

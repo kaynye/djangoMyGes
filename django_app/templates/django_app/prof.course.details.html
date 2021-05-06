@@ -56,31 +56,33 @@
                   </table>
             </div>
         </div>
-        <div class="mb-2">
-            <button 
-                type="button"
-                class="btn btn-outline-secondary btn-block btn-active" 
-                data-toggle="collapse"
-                data-target="#collapse_eleve"
-                aria-expanded="false"
-                aria-controls="collapse_eleve"
-                onclick="test('collapse_2')"
-            >
-                Classes <i id="collapse_2" class="fas fa-chevron-up"></i> 
-            </button>
-            <div class="collapse mt-2 mb-2" id="collapse_eleve">
-                <div class="row">
-                    {% for classroom in classrooms %}
-                        <div class="col-3 mb-2">
-                            <a href="{% url 'django_app:profCourseStudents' id=course.id class_id=classroom.id %}">
-                                <div class="card card-body text-center">
-                                    {{ classroom.c_name }}
+        {% if request.user.groups.all.0.name == "intervenant"  %}
+            <div class="mb-2">
+                <button 
+                    type="button"
+                    class="btn btn-outline-secondary btn-block btn-active" 
+                    data-toggle="collapse"
+                    data-target="#collapse_eleve"
+                    aria-expanded="false"
+                    aria-controls="collapse_eleve"
+                    onclick="test('collapse_2')"
+                >
+                    Classes <i id="collapse_2" class="fas fa-chevron-up"></i> 
+                </button>
+                    <div class="collapse mt-2 mb-2" id="collapse_eleve">
+                        <div class="row">
+                            {% for classroom in classrooms %}
+                                <div class="col-3 mb-2">
+                                    <a href="{% url 'django_app:profCourseStudents' id=course.id class_id=classroom.id %}">
+                                        <div class="card card-body text-center">
+                                            {{ classroom.c_name }}
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
+                            {% endfor %}                       
                         </div>
-                    {% endfor %}                       
+                    </div>
                 </div>
-            </div>
-        </div>
+            {% endif %}
     </div>
 {% endblock %}
