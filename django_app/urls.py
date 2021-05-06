@@ -44,7 +44,7 @@ urlpatterns = [
     path("change_profile", views.model_form_upload, name="change_profile"),
     path("change_profile", views.model_form_upload, name="change_profile"),
     
-    path("get_events", views.get_events, name="get_events")
+    path("get_events", views.get_events, name="get_events"),
     
     path('prof/students/notes/<int:id>/<int:id_student>/update', views.NoteUpdate, name="NoteUpdate")
 ]

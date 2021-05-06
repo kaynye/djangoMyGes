@@ -19,18 +19,13 @@
         {% block javascript %}{% endblock %}        
     </head>
     <body>
-    {% with request.user.groups.all|first as group %}
-      
       {% if request.user.is_authenticated %}
-          <h1>
-            {{ group.name }}
-          </h1>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <a class="navbar-brand" href="#">MYGES 2.0</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-          
+            
             <div class="collapse navbar-collapse" id="navbarColor01">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item {% if request.path == '/home' %}active{% endif %}">
@@ -39,27 +34,30 @@
                     Accueil
                   </a>
                 </li>
-                <li class="nav-item {% if request.path == '/classes' %}active{% endif %}">
-                  
-                  <a class="nav-link" href="{% url 'django_app:classes' %}">
-                    <i class="fas fa-school"></i>
-                    Classes
-                  </a>
-                </li>
-                <li class="nav-item {% if request.path == '/planning' %}active{% endif %}">
-                  
-                  <a class="nav-link" href="{% url 'django_app:planning' %}">
-                    <i class="fas fa-calendar-alt"></i>
-                    Planning
-                  </a>
-                </li>
-                <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
-                  
-                  <a class="nav-link" href="{% url 'django_app:notes' %}">
-                    <i class="fas fa-bell"></i>
-                    Notes
-                  </a>
-                </li>
+                {% if request.user.groups.all.0.name == "eleve" %}
+                  <li class="nav-item {% if request.path == '/classes' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:classes' %}">
+                      <i class="fas fa-school"></i>
+                      Classes
+                    </a>
+                  </li>
+                  <li class="nav-item {% if request.path == '/planning' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:planning' %}">
+                      <i class="fas fa-calendar-alt"></i>
+                      Planning
+                    </a>
+                  </li>
+                  <li class="nav-item {% if request.path == '/notes' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:notes' %}">
+                      <i class="fas fa-bell"></i>
+                      Notes
+                    </a>
+                  </li>
+                {% endif %}
+                {% if request.user.groups.all.0.name == "intervenant" %}
                 <li class="nav-item {% if request.path == '/prof/course' %}active{% endif %}">
                   
                   <a class="nav-link" href="{% url 'django_app:profCourse' %}">
@@ -74,6 +72,37 @@
                     Elèves
                   </a>
                 </li>
+                {% endif %}
+                {% if request.user.groups.all.0.name == "coordinateur" %}
+                  <li class="nav-item {% if request.path == '/coordinateur/user' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:coordinateurUserCreate' %}">
+                      <i class="fas fa-user"></i>
+                      Utilisateurs
+                    </a>
+                  </li>
+                  <li class="nav-item {% if request.path == '/coordinateur/matiere' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:coordinateurMatiereCreate' %}">
+                      <i class="fas fa-book"></i>
+                      Matières
+                    </a>
+                  </li>
+                  <li class="nav-item {% if request.path == '/coordinateur/event' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:coordinateurEventCreate' %}">
+                      <i class="fas fa-calendar-alt"></i>
+                      Evènement
+                    </a>
+                  </li>
+                  <li class="nav-item {% if request.path == '/coordinateur/classroom' %}active{% endif %}">
+                    
+                    <a class="nav-link" href="{% url 'django_app:coordinateurClassroomCreate' %}">
+                      <i class="fas fa-school"></i>
+                      Classes
+                    </a>
+                  </li>
+                {% endif %}
               </ul>
               <div class="nav-item">
                   <a class="text-light " href="{% url 'django_app:profile' %}">
@@ -83,9 +112,6 @@
               <div class="nav-item">
                 <a class="text-light " href="{% url 'django_app:logoutUser' %}"><i class="fas fa-sign-out-alt fa-lg nav-item"></i>Deconnexion</a>
               </div>
-              
-
-
             </div>
           </nav>
 
@@ -108,7 +134,5 @@
         
             {% endblock %}
         </div>
-
-        {% endwith %}
     </body>
 </html>
