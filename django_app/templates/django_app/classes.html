@@ -25,6 +25,7 @@
                 <tr class="table-active">
                   <th scope="col">Pseudonyme</th>
                   <th scope="col">Prénom / Nom</th>
+                  <th scope="col">Image</th>
                 </tr>
               </thead>
               <tbody>
@@ -32,6 +33,13 @@
                   <tr>
                       <th scope="row">{{ student.username }}</th>
                       <td>{{ student.first_name }} {{ student.last_name|upper }}</td>
+                      <td>
+                        {% if student.u_profile.pu_picture %}
+                          <img class="profile-picture" src="{{ student.u_profile.pu_picture.url }}" height="100" width="100" alt="">
+                        {% else %}
+                          <img class="profile-picture" src="/media/default.png" height="100" width="100" alt="">
+                        {% endif %}
+                      </td>
                   </tr>
                   {% endfor %}
               </tbody>

@@ -10,6 +10,7 @@ from .models import *
 admin.site.register(Classroom)
 admin.site.register(Evenement)
 admin.site.register(Matiere)
+admin.site.register(ProfileUser)
 
 # class MatiereResource(ImportExportModelAdmin):
 

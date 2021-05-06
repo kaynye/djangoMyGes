@@ -6,6 +6,8 @@ from django.contrib import messages #import messages
 from .models import Classroom
 from .models import Matiere
 from .models import Note
+from .models import ProfileUser
+from .forms import ProfileUserForm
 from pprint import pprint
 
 @login_required
@@ -23,9 +25,9 @@ def login_page(request):
 @login_required
 def profile(request):
     getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+    form = ProfileUserForm()
 
-    print(getClass)
-    return render(request,"django_app/profile.html", {"class": getClass})
+    return render(request,"django_app/profile.html", {"class": getClass, "form": form})
 
 @login_required
 def planning(request):
@@ -111,3 +113,21 @@ def loginUser(request):
 def logoutUser(request):
     logout(request)
     return redirect('django_app:login_page')
+
+@login_required
+def model_form_upload(request):
+    if request.method == 'POST':
+        form = ProfileUserForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = form.save(commit=False)
+            
+            if ProfileUser.objects.filter(pu_user=request.user).exists():
+                ProfileUser.objects.filter(pu_user=request.user).first().delete()
+
+            messages.success(request, "L'image à correctement été changée." )
+            f.pu_user = request.user
+            f.save()
+        else:
+            messages.error(request, "L'image envoyé ne correspond pas aux attentes de l'application." )
+        
+    return redirect("django_app:profile")
