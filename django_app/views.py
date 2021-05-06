@@ -154,7 +154,7 @@ def profCourseStudents(request, id):
 def profCourseDetails(request, id):
     course = Matiere.objects.get(id=id)
     classrooms = course.m_classroom.filter(c_promotion=timezone.now().year)
-
+    
     return render(
         request,
         "django_app/prof.course.details.html",

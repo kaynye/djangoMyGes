@@ -84,5 +84,34 @@
                     </div>
                 </div>
             {% endif %}
+            <div class="mb-2">
+                <button 
+                    type="button"
+                    class="btn btn-outline-secondary btn-block btn-active" 
+                    data-toggle="collapse"
+                    data-target="#collapse_eleve"
+                    aria-expanded="false"
+                    aria-controls="collapse_eleve"
+                    onclick="test('collapse_2')"
+                >
+                    Support de cours <i id="collapse_2" class="fas fa-chevron-up"></i> 
+                </button>
+                    <div class="collapse mt-2 mb-2" id="collapse_eleve">
+                        <div class="row">
+                            {% for supports in course.m_support.all %}
+                                <div class="col-3 mb-2">
+                                    <a href="{{ supports.sdc_file.url }}" download>
+                                        <div class="card card-body pl-2 pr-2">
+                                            <div class="row m-auto">
+                                                {{ supports.sdc_name }}
+                                                <i class="fas fa-download ml-2"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            {% endfor %}                       
+                        </div>
+                    </div>
+                </div>
     </div>
 {% endblock %}
