@@ -7,7 +7,8 @@ from django.contrib import messages  # import messages
 import django.utils.timezone as timezone
 from django.contrib import messages  # import messages
 from django.contrib.auth.models import User, Group
-from .forms import NoteForm
+from .forms import *
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 @login_required
 def home(request):
@@ -174,3 +175,63 @@ def profCourseStudents(request, id, class_id):
         "django_app/prof.all.students.html",
         {"students": students },
     )
+    
+@login_required
+def coordinateurUserCreate(request):
+    users = User.objects.all()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = UserCreationForm()
+
+            return render(
+                request,
+                "django_app/coordinateur.form.html",
+                {
+                    "form": form,
+                    "users": users,
+                    "title": "Utilisateurs",
+                    "method": "POST",
+                },
+            )
+    else:
+        form = UserCreationForm()
+
+    return render(
+        request,
+        "django_app/coordinateur.form.html",
+        {"form": form, "users": users, "title": "Utilisateurs", "method": "POST"},
+    )
+
+
+@login_required
+def coordinateurUserEdit(request, id):
+    user = User.objects.get(id=id)
+
+    if request.method == "POST":
+        form = EditUserForm(request.POST, instance = user)
+        if form.is_valid():
+            user = form.save()
+            form = EditUserForm(instance = user)
+
+            return redirect('django_app:coordinateurUserCreate')
+
+    else:
+        form = EditUserForm(instance = user)
+
+
+    return render(
+        request,
+        "django_app/form_generique.html",
+        {"form": form, "user": user, "title": "Utilisateurs", "method": "POST"},
+    )
+
+def coordinateurUserDelete(request, id):
+    user = User.objects.get(id=id)
+
+    user.delete()
+        
+    return redirect('django_app:coordinateurUserCreate')
+

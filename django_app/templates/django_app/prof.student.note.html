@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}  
 
 {% block css %}
 {% endblock %}  
@@ -13,9 +14,9 @@
         {% csrf_token %}
     
         <!-- Using the formset -->
-        {{ form.as_p }}
+        {{ form|crispy }}
         
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" class="btn btn-primary" />
     </form>
     
   </div>

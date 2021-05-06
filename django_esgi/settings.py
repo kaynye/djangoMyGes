@@ -48,9 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'crispy_forms',
     'django.contrib.staticfiles',
     'import_export',
-    'django_app'
+    'django_app',
 ]
 
 GRAPH_MODELS = {
@@ -157,3 +158,5 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
