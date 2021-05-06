@@ -6,4 +6,5 @@ sqlparse==0.4.1
 bootstrap-admin==0.4.4
 django-import-export==2.5.0
 gunicorn==19.7.1
+django-crispy-forms==1.11.2
 

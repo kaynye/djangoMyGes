@@ -22,6 +22,10 @@ urlpatterns = [
     path('prof/course/<int:id>', views.profCourseDetails, name="profCourseDetails"),
     path('prof/students', views.students, name="students"),
     path('prof/students/<int:id>/notes', views.notePost, name="noteOperation"),
-    path('prof/students/notes/<int:id>/delete', views.NoteDelete, name="NoteDelete")
-
+    path('prof/students/notes/<int:id>/<int:id_student>/delete', views.NoteDelete, name="NoteDelete"),
+    path('prof/students/<int:id>/note', views.notePost, name="notePost"),
+    path('coordinateur/user', views.coordinateurUserCreate, name="coordinateurUserCreate"),
+    path('coordinateur/user/<int:id>/edit', views.coordinateurUserEdit, name="coordinateurUserEdit"),
+    path('coordinateur/user/<int:id>/delete', views.coordinateurUserDelete, name="coordinateurUserDelete"),
+    path('prof/students/notes/<int:id>/<int:id_student>/update', views.NoteUpdate, name="NoteUpdate")
 ]

@@ -1,0 +1,37 @@
+{% load crispy_forms_tags %}  
+
+<div class="row">
+    <div class="col-6">
+
+        <h1>{{ title }}</h1>
+    </div>
+    <div class="col-6 text-right mb-2">    
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+            Créer un {{ title }}
+        </button>
+    </div>
+</div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Form</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form method="POST" enctype="multipart/form-data">
+
+                <!-- Security token -->
+                {% csrf_token %}
+            
+                <!-- Using the formset -->
+                {{ form|crispy }}
+                
+                <input type="submit" value="Submit" class="btn btn-primary"/>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 

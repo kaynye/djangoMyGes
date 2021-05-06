@@ -7,7 +7,8 @@ from django.contrib import messages  # import messages
 import django.utils.timezone as timezone
 from django.contrib import messages  # import messages
 from django.contrib.auth.models import User, Group
-from .forms import NoteForm
+from .forms import *
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 @login_required
 def home(request):
@@ -169,21 +170,103 @@ def notePost(request,id):
         note=form.save()
         note.n_eleve=student
         note.save()
-        
 
+    
     return render(request, "django_app/prof.student.note.html",
                   {
                    "notes":notes,
-                    "form": form
+                    "form": form,
+                    "title": "Note"
                   })
     
     
 # delete view for details
-def NoteDelete(request, id):
+def NoteDelete(request, id,id_student):
+
     note = Note.objects.get(id=id)
+    current_user = request.user
     note.delete()  
-    return redirect('django_app:noteOperation', id=2)
+    return redirect('django_app:notePost', id=id_student)
+
+@login_required
+def NoteUpdate(request, id,id_student):
+    note = Note.objects.get(id=id)
+    
+    if request.method == "POST":
+        form = NoteForm(request.POST or None,instance = note)
+
+        if form.is_valid():
+            note = form.save()
+            form = NoteForm(instance = note)
+
+        return redirect('django_app:notePost', id=id_student)
+
+    else:
+        form = NoteForm(instance = note)
 
 
-  
-    #return render(request, "django_app/prof.student.note.html")
+    return render(
+        request,
+        "django_app/form.update.note.html",
+        {"form": form, "title": "Notes"},
+    )
+
+@login_required
+def coordinateurUserCreate(request):
+    users = User.objects.all()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = UserCreationForm()
+
+            return render(
+                request,
+                "django_app/coordinateur.form.html",
+                {
+                    "form": form,
+                    "users": users,
+                    "title": "Utilisateurs",
+                    "method": "POST",
+                },
+            )
+    else:
+        form = UserCreationForm()
+
+    return render(
+        request,
+        "django_app/coordinateur.form.html",
+        {"form": form, "users": users, "title": "Utilisateurs", "method": "POST"},
+    )
+
+
+@login_required
+def coordinateurUserEdit(request, id):
+    user = User.objects.get(id=id)
+
+    if request.method == "POST":
+        form = EditUserForm(request.POST, instance = user)
+        if form.is_valid():
+            user = form.save()
+            form = EditUserForm(instance = user)
+
+            return redirect('django_app:coordinateurUserCreate')
+
+    else:
+        form = EditUserForm(instance = user)
+
+
+    return render(
+        request,
+        "django_app/form_generique.html",
+        {"form": form, "user": user, "title": "Utilisateurs", "method": "POST"},
+    )
+
+def coordinateurUserDelete(request, id):
+    user = User.objects.get(id=id)
+
+    user.delete()
+        
+    return redirect('django_app:coordinateurUserCreate')
+
