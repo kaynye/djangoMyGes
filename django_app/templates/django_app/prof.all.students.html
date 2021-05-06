@@ -4,13 +4,11 @@
 {% block css %}
 {% endblock %}  
 {% block content%}
-
 <br>
 <div class="container" style="max-width: 970px;">
     <h1>Elèves</h1>
     <div class="row">
-        {% for classroom in classrooms %}
-            {% for student in classroom.c_student.all %}
+        {% for student in students.all %}
       <div class="col-md-4">
         <div class="card mb-3 ">
            <img src="https://picsum.photos/200/200?random={{student.id}}">
@@ -24,13 +22,16 @@
                 <li class="list-group-item">Username: {{ student.username }}</li>
             </ul>
             <div class="d-flex flex-column">
-                <a href="#" class="btn btn-outline-primary">Notes</a>
-              </div>
+              <a href="#" class="btn btn-outline-primary">Notes</a>
+            </div>
+        
           </div>
         </div>
 
-        {% endfor %}
+      
       {% endfor %}
     </div>
   </div>
+
+    
 {% endblock %}
