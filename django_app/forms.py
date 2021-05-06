@@ -1,7 +1,7 @@
 from django import forms
-from .models import Note
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User, Group
+from django_app.models import *
 
 class NoteForm(forms.ModelForm):
   
@@ -27,6 +27,10 @@ class EditUserForm(UserChangeForm):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'groups', 'is_staff' )
 
+class MatiereCreationForm(forms.ModelForm):
+    class Meta:
+        model = Matiere
+        fields = ['m_name', 'm_description', 'm_coefficient', 'm_profs', 'm_evenement', 'm_classroom']
 
 # class SignUpForm(UserCreationForm):
 #     first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')

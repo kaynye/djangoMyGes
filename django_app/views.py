@@ -188,7 +188,7 @@ def coordinateurUserCreate(request):
 
             return render(
                 request,
-                "django_app/coordinateur.form.html",
+                "django_app/coordinateur.user.html",
                 {
                     "form": form,
                     "users": users,
@@ -201,7 +201,7 @@ def coordinateurUserCreate(request):
 
     return render(
         request,
-        "django_app/coordinateur.form.html",
+        "django_app/coordinateur.user.html",
         {"form": form, "users": users, "title": "Utilisateurs", "method": "POST"},
     )
 
@@ -225,9 +225,10 @@ def coordinateurUserEdit(request, id):
     return render(
         request,
         "django_app/form_generique.html",
-        {"form": form, "user": user, "title": "Utilisateurs", "method": "POST"},
+        {"form": form, "title": "Utilisateurs", "method": "POST"},
     )
 
+@login_required
 def coordinateurUserDelete(request, id):
     user = User.objects.get(id=id)
 
@@ -235,3 +236,62 @@ def coordinateurUserDelete(request, id):
         
     return redirect('django_app:coordinateurUserCreate')
 
+@login_required
+def coordinateurMatiereCreate(request):
+    matieres = Matiere.objects.all()
+
+    if request.method == "POST":
+        form = MatiereCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            form = MatiereCreationForm()
+
+            return render(
+                request,
+                "django_app/coordinateur.matiere.html",
+                {
+                    "form": form,
+                    "matieres": matieres,
+                    "title": "Matieres",
+                    "method": "POST",
+                },
+            )
+    else:
+        form = MatiereCreationForm()
+
+    return render(
+        request,
+        "django_app/coordinateur.matiere.html",
+        {"form": form, "matieres": matieres, "title": "Matieres", "method": "POST"},
+    )
+
+
+@login_required
+def coordinateurMatiereEdit(request, id):
+    matiere = Matiere.objects.get(id=id)
+
+    if request.method == "POST":
+        form = EditMatiereForm(request.POST, instance = matiere)
+        if form.is_valid():
+            matiere = form.save()
+            form = EditMatiereForm(instance = matiere)
+
+            return redirect('django_app:coordinateurMatiereCreate')
+
+    else:
+        form = EditMatiereForm(instance = matiere)
+
+
+    return render(
+        request,
+        "django_app/form_generique.html",
+        {"form": form, "title": "Matieres", "method": "POST"},
+    )
+
+@login_required
+def coordinateurMatiereDelete(request, id):
+    matiere = Matiere.objects.get(id=id)
+
+    matiere.delete()
+        
+    return redirect('django_app:coordinateurMatiereCreate')

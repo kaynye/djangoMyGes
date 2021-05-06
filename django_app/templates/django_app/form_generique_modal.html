@@ -19,6 +19,7 @@
           <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
+            {% if form %}
             <form method="{{ method }}" enctype="multipart/form-data">
 
                 <!-- Security token -->
@@ -29,6 +30,7 @@
                 
                 <input type="submit" value="Submit" class="btn btn-primary"/>
             </form>
+            {% endif %}
         </div>
       </div>
     </div>

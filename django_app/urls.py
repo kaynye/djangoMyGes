@@ -25,5 +25,9 @@ urlpatterns = [
     
     path('coordinateur/user', views.coordinateurUserCreate, name="coordinateurUserCreate"),
     path('coordinateur/user/<int:id>/edit', views.coordinateurUserEdit, name="coordinateurUserEdit"),
-    path('coordinateur/user/<int:id>/delete', views.coordinateurUserDelete, name="coordinateurUserDelete")
+    path('coordinateur/user/<int:id>/delete', views.coordinateurUserDelete, name="coordinateurUserDelete"),
+    
+    path('coordinateur/matiere', views.coordinateurMatiereCreate, name="coordinateurMatiereCreate"),
+    path('coordinateur/matiere/<int:id>/edit', views.coordinateurMatiereEdit, name="coordinateurMatiereEdit"),
+    path('coordinateur/matiere/<int:id>/delete', views.coordinateurMatiereDelete, name="coordinateurMatiereDelete")
 ]
