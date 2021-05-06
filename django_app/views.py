@@ -417,7 +417,7 @@ def coordinateurEventDelete(request, id):
 @login_required
 def coordinateurClassroomCreate(request):
     classrooms = Classroom.objects.all()
-    print("CLASSE CLASSE CLASSE", classrooms)
+
     if request.method == "POST":
         form = ClassroomCreationForm(request.POST)
         if form.is_valid():
