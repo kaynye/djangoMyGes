@@ -16,3 +16,9 @@ class NoteForm(forms.ModelForm):
             "n_matiere",
             "n_eleve",
         ]
+from .models import ProfileUser
+
+class ProfileUserForm(forms.ModelForm):
+    class Meta:
+        model = ProfileUser
+        fields = ('pu_picture', )
