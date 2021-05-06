@@ -12,10 +12,10 @@ class NoteForm(forms.ModelForm):
   
         # specify fields to be used
         fields = [
-            "n_note",
-            "n_type",
             "n_matiere",
-            "n_eleve",
+            "n_type",
+            "n_note",
+            
         ]
 
 class EditUserForm(UserChangeForm):

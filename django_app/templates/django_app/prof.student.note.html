@@ -5,21 +5,51 @@
 {% block css %}
 {% endblock %}  
 {% block content%}
-<br>
-<div class="container" style="max-width: 970px;">
-    <h1>Elèves</h1>
-    <form method="POST" enctype="multipart/form-data">
 
-        <!-- Security token -->
-        {% csrf_token %}
-    
-        <!-- Using the formset -->
-        {{ form|crispy }}
-        
-        <input type="submit" value="Submit" class="btn btn-primary" />
-    </form>
-    
-  </div>
+    <br>
+    <div class="container">
+      {% include 'django_app/form_modal.notes.html' %}
+
+        <table class="table table-hover">
+            <thead>
+              <tr class="table-active">
+                <th scope="col">Matière</th>
+                <th scope="col">Intervenant</th>
+                <th scope="col">Coefficient</th>
+                <th scope="col">Type</th>
+                <th scope="col">Note</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for note in notes.all %}
+                <tr>
+                    <th scope="row">{{ note.n_matiere }}</th>
+                    <td>
+                      {%for prof in note.n_matiere.m_profs.all %}
+                          {{ prof }}
+                
+                      {% endfor %}
+                         
+                    </td>
+                    <td>{{ note.n_matiere.m_coefficient }}</td>
+                    <td>{{ note.n_type }}</td>
+                    <td>{{ note.n_note }}</td>
+                    <td>
+                      <div class="nav-item">
+                        <a href="{% url 'django_app:NoteUpdate' id=note.id id_student=note.n_eleve.id %}"><i class="fas fa-edit"></i></a>
+                        |
+                        <a href="{% url 'django_app:NoteDelete' id=note.id id_student=note.n_eleve.id %}"><i class="fas fa-trash-alt"></i></i></a>
+                        </a>
+
+                        
+                    </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
 
     
 {% endblock %}

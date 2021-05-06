@@ -175,20 +175,6 @@ def students(request):
         },
     )
 
-
-def noteOperation(request):
-    # dictionary for initial data with
-    # field names as keys
-    context = {}
-
-    # add the dictionary during initialization
-    form = NoteForm(request.POST or None)
-    if form.is_valid():
-        form.save()
-
-    context["form"] = form
-    return render(request, "django_app/prof.student.note.html", context)
-
 @login_required
 def profCourseStudents(request, id, class_id):
     course = Matiere.objects.get(id=id)
@@ -198,9 +184,58 @@ def profCourseStudents(request, id, class_id):
     return render(
         request,
         "django_app/prof.all.students.html",
-        {"students": students },
+        {"students": students,"displyNote": True},
     )
     
+def notePost(request,id):
+    student = User.objects.get(id=id)
+    notes = Note.objects.filter(n_eleve=id).all()
+    form = NoteForm(request.POST or None)
+    if form.is_valid():
+        note=form.save()
+        note.n_eleve=student
+        note.save()
+
+    
+    return render(request, "django_app/prof.student.note.html",
+                  {
+                   "notes":notes,
+                    "form": form,
+                    "title": "Note"
+                  })
+    
+    
+# delete view for details
+def NoteDelete(request, id,id_student):
+
+    note = Note.objects.get(id=id)
+    current_user = request.user
+    note.delete()  
+    return redirect('django_app:notePost', id=id_student)
+
+@login_required
+def NoteUpdate(request, id,id_student):
+    note = Note.objects.get(id=id)
+    
+    if request.method == "POST":
+        form = NoteForm(request.POST or None,instance = note)
+
+        if form.is_valid():
+            note = form.save()
+            form = NoteForm(instance = note)
+
+        return redirect('django_app:notePost', id=id_student)
+
+    else:
+        form = NoteForm(instance = note)
+
+
+    return render(
+        request,
+        "django_app/form.update.note.html",
+        {"form": form, "title": "Notes"},
+    )
+
 @login_required
 def coordinateurUserCreate(request):
     users = User.objects.all()

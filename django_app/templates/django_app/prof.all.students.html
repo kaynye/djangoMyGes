@@ -21,10 +21,12 @@
                 <li class="list-group-item">Email: {{ student.email }}</li>
                 <li class="list-group-item">Username: {{ student.username }}</li>
             </ul>
+            {% if displyNote %}
             <div class="d-flex flex-column">
-              <a href="#" class="btn btn-outline-primary">Notes</a>
+              <a href="{% url 'django_app:noteOperation' id=student.id%}" class="btn btn-outline-primary">Notes</a>
             </div>
-        
+            {% endif %}
+            
           </div>
         </div>
 
