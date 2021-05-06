@@ -72,7 +72,7 @@
                 <div class="row">
                     {% for classroom in classrooms %}
                         <div class="col-3 mb-2">
-                            <a href="{% url 'django_app:profCourseClass' id=course.id class_id=classroom.id %}">
+                            <a href="{% url 'django_app:profCourseStudents' id=course.id class_id=classroom.id %}">
                                 <div class="card card-body text-center">
                                     {{ classroom.c_name }}
                                 </div>

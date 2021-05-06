@@ -5,7 +5,9 @@ from django.contrib.auth import login, authenticate, logout
 from django_app.models import *
 from django.contrib import messages  # import messages
 import django.utils.timezone as timezone
-
+from django.contrib import messages  # import messages
+from django.contrib.auth.models import User, Group
+from .forms import NoteForm
 
 @login_required
 def home(request):
@@ -114,7 +116,7 @@ def profCourse(request):
 @login_required
 def profCourseStudents(request, id):
     course = Matiere.objects.get(id=id)
-
+    
     return render(
         request,
         "django_app/prof.course.students.html",
@@ -126,9 +128,49 @@ def profCourseStudents(request, id):
 def profCourseDetails(request, id):
     course = Matiere.objects.get(id=id)
     classrooms = course.m_classroom.filter(c_promotion=timezone.now().year)
-    
+
     return render(
         request,
         "django_app/prof.course.details.html",
         {"course": course, "classrooms": classrooms},
+    )
+
+
+@login_required
+def students(request):
+    group = Group.objects.filter(name="eleve").first()
+    students = User.objects.filter(groups=group).all()
+
+    return render(
+        request,
+        "django_app/prof.all.students.html",
+        {
+            "students": students,
+        },
+    )
+
+
+def noteOperation(request):
+    # dictionary for initial data with
+    # field names as keys
+    context = {}
+
+    # add the dictionary during initialization
+    form = NoteForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+
+    context["form"] = form
+    return render(request, "django_app/prof.student.note.html", context)
+
+@login_required
+def profCourseStudents(request, id, class_id):
+    course = Matiere.objects.get(id=id)
+    classroom = course.m_classroom.get(id=class_id)
+    students = classroom.c_student.all()
+    
+    return render(
+        request,
+        "django_app/prof.all.students.html",
+        {"students": students },
     )
