@@ -42,7 +42,7 @@ class Matiere(models.Model):
 class SupportDeCours(models.Model):
     sdc_name=models.CharField(max_length=255, verbose_name="Nom du support")
     sdc_file = models.FileField(blank=True, verbose_name="fichier")
-    sdc_matiere = models.ManyToManyField(Matiere, verbose_name="Support de cours")
+    sdc_matiere = models.ManyToManyField(Matiere, related_name="m_support", verbose_name="Support de cours")
     e_proprietaire = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name="proprietaire", null=True)
 
 
