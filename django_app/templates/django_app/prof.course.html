@@ -22,7 +22,7 @@
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>
-                        <a href="{% url 'django_app:profCourseStudents' id=1 %}">
+                        <a href="{% url 'django_app:profCourseDetails' id=course.id %}">
                             {{ course.m_name }}
                         </a>
                     </td>
