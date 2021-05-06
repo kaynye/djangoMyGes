@@ -19,9 +19,14 @@ urlpatterns = [
     path("classes", views.student_class, name="classes"),
     path("planning", views.planning, name="planning"),
     path("notes", views.notes, name="notes"),
+<<<<<<< HEAD
     path('prof/course/<int:id>', views.profCourseDetails, name="profCourseDetails"),
     path('prof/students', views.students, name="students"),
     path('prof/students/note', views.noteOperation, name="noteOperation"),
 
     path("change_profile", views.model_form_upload, name="change_profile")
+=======
+    path("change_profile", views.model_form_upload, name="change_profile"),
+    path("get_events", views.get_events, name="get_events")
+>>>>>>> student
 ]

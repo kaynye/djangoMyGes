@@ -9,11 +9,12 @@ from django.contrib import messages  # import messages
 from django.contrib.auth.models import User, Group
 from .forms import NoteForm, ProfileUserForm
 from pprint import pprint
+from django.http import JsonResponse
 
 
 @login_required
 def home(request):
-    return render(request, "django_app/home.html")
+    return render(request,"django_app/home.html", {"range": range(9), "random": range(20, 60)})
 
 
 def login_page(request):
@@ -216,3 +217,18 @@ def model_form_upload(request):
             messages.error(request, "L'image envoyé ne correspond pas aux attentes de l'application." )
         
     return redirect("django_app:profile")
+
+@csrf_exempt
+@login_required
+def get_events(request):
+    if request.method == 'POST':
+        results = []
+        getClass = Classroom.objects.filter(c_student=request.user).all().order_by("c_promotion").first()
+        getEvenements = Evenement.objects.filter(e_class=getClass).all()
+
+        for event in getEvenements:
+            results.append({"title": event.e_name, "start": event.e_date_debut, "end": event.e_date_fin})
+
+        return JsonResponse(results, safe=False)
+    else:
+        return JsonResponse({"method_allowed": ["POST"]})
