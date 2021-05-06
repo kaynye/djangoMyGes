@@ -6,24 +6,41 @@
 {% block content%}
     <br>
     <div class="container">
-        <h1><i class="fas fa-user-graduate"></i> Elèves de votre classe ({{ class.c_name }})</h1>
+        <h1><i class="fas fa-user-graduate"></i> Elèves</h1>
         <br>
-        <table class="table table-hover">
-            <thead>
-              <tr class="table-active">
-                <th scope="col">Pseudonyme</th>
-                <th scope="col">Prénom / Nom</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for student in students %}
-                <tr>
-                    <th scope="row">{{ student.username }}</th>
-                    <td>{{ student.first_name }} {{ student.last_name|upper }}</td>
+        <ul class="nav nav-tabs">
+          {% for class in classes %}
+            <li style="cursor: pointer;" class="nav-item">
+              <a class="nav-link {% if forloop.first %}active{% endif %}" href="#class{{ class.id }}" data-bs-toggle="tab">{{ class }}</a>
+            </li>
+          {% endfor %}
+        </ul>
+        <br>
+        
+        <div id="myTabContent" class="tab-content">
+          {% for class in classes %}
+          <div id="class{{ class.id }}" class="tab-pane fade {% if forloop.first %}show active{% endif %}">
+            <table class="table table-hover">
+              <thead>
+                <tr class="table-active">
+                  <th scope="col">Pseudonyme</th>
+                  <th scope="col">Prénom / Nom</th>
                 </tr>
-                {% endfor %}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                  {% for student in class.c_student.all %}
+                  <tr>
+                      <th scope="row">{{ student.username }}</th>
+                      <td>{{ student.first_name }} {{ student.last_name|upper }}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        </div>
+
+        
     </div>
     
 {% endblock %}
